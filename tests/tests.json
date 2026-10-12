@@ -1,0 +1,75 @@
+[
+  {
+    "name": "Create and retain a custom language test",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "create custom prompt test",
+      "choose language",
+      "local persistence after refresh"
+    ],
+    "description": "Verifies a user can create a prompt test and find it after refreshing.",
+    "steps": [
+      "Click New test",
+      "Enter a test title and prompt",
+      "Save the test",
+      "Refresh the page and select the test"
+    ],
+    "expected": "The saved test remains in the suite with the selected language and prompt."
+  },
+  {
+    "name": "Block live testing without endpoint credentials",
+    "viewport": "desktop",
+    "covers": [
+      "gateway URL validation",
+      "API key validation",
+      "prevent incomplete live request"
+    ],
+    "description": "Verifies a request is blocked if the user has not provided an authorised HTTPS endpoint and key.",
+    "steps": [
+      "Leave gateway URL empty",
+      "Leave API key empty",
+      "Click Run on N-ATLAS"
+    ],
+    "expected": "A clear validation message requests the gateway URL and API key; no model response is displayed."
+  },
+  {
+    "name": "Show an authentication error from the gateway",
+    "viewport": "desktop",
+    "covers": [
+      "backend N-ATLAS request",
+      "upstream authentication errors",
+      "safe error messaging"
+    ],
+    "description": "Verifies an upstream 401 is shown without exposing the entered API key.",
+    "qa_faults": [
+      {
+        "method": "POST",
+        "path": "/api/natlas/run",
+        "status": 401,
+        "body_json": {
+          "error": "auth_failed",
+          "message": "N-ATLAS rejected the supplied credentials. Check the API key and endpoint."
+        }
+      }
+    ],
+    "steps": [
+      "Enter a valid-looking HTTPS gateway URL",
+      "Enter a test API key",
+      "Click Run on N-ATLAS"
+    ],
+    "expected": "An authentication error asks the user to check the key and endpoint; the API key is not shown."
+  },
+  {
+    "name": "Export the reusable test suite",
+    "viewport": "mobile",
+    "covers": ["export prompt tests as JSON", "responsive mobile workflow"],
+    "description": "Verifies the current test cases can be exported for review and reuse.",
+    "steps": [
+      "Open the test suite",
+      "Click Export test pack",
+      "Open the downloaded JSON file"
+    ],
+    "expected": "A JSON file downloads containing the current test titles, languages and prompts."
+  }
+]
